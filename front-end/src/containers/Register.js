@@ -16,7 +16,8 @@ class Register extends Component{
 
 	handleSubmit(event){
 		event.preventDefault();
-		this.props.authAction();
+		const name = document.getElementById('name').value;
+		this.props.authAction(name);
 	}
 
 	render(){
@@ -28,7 +29,7 @@ class Register extends Component{
 	                Name
 	            </Col>
 	            <Col sm={10}>
-	                <FormControl type="text" name="fullName" placeholder="Full Name" />
+	                <FormControl id="name" type="text" name="fullName" placeholder="Full Name" />
 	            </Col>
 	        </FormGroup>
 	        <FormGroup controlId="formHorizontalName" validationState={this.state.emailError}>
