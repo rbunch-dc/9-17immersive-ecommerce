@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
 import {Form, FormGroup, ControlLabel, FormControl, Button, Col, MenuItem} from 'react-bootstrap';
+import { connect } from 'react-redux';
+// we need bindActionCreators so that we can correlate an action to the dispatcher
+// It's down below inside of mapDispatchToProps
+import { bindActionCreators } from 'redux';
+import AuthAction from '../actions/AuthAction';
 
 class Register extends Component{
 	constructor(){
 		super();
 		this.state = {
-			
 		}
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleSubmit(event){
+		event.preventDefault();
+		this.props.authAction();
 	}
 
 	render(){
+		console.log(this.props.auth);
 		return(
-			<Form horizontal>
+			<Form horizontal onSubmit={this.handleSubmit}>
 	        <FormGroup controlId="formHorizontalName" validationState={this.state.nameError}>
 	            <Col componentClass={ControlLabel} sm={2}>
 	                Name
@@ -80,5 +91,23 @@ class Register extends Component{
 	}
 }
 
-export default Register;
+function mapStateToProps(state){
+	// state = RootReducer
+	return{
+		// key = this.props.KEY will be accesible to this component
+		// value = property of RootReducer
+		auth: state.auth
+	}
+}
+
+function mapDispatchToProps(dispatch){
+	// dispatch is teh thing that takes any action
+	// and sends it out to all teh reducers	
+	return bindActionCreators({
+		authAction: AuthAction
+	}, dispatch)
+}
+
+// export default Register;
+export default connect(mapStateToProps,mapDispatchToProps)(Register);
 
