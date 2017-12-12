@@ -12,8 +12,25 @@ import RootReducer from './reducers/RootReducer';
 // Redux Actions which means... we need redux-promise.
 import reduxPromise from 'redux-promise';
 
+// We have set up Redux (just need theStore below). 
+// Now we need a way to tell REact about it. PROVIDER!
+import { Provider } from 'react-redux';
+
+// create the store... the ugly way
+const theStore = applyMiddleware(reduxPromise)(createStore)(RootReducer);
+// the friendly way...
+// const middleWare = applyMiddleware(reduxPromise);
+// const storeWithMid = middleWare(createStore);
+// const theStore = storeWithMid(RootReducer);
+// x()()()
+
+// Hand render the Provider and hand Provider theStore.
+// Put App INSIDE of the Provider, so that everything inside of App,
+// will know about the Provider/theStore
 ReactDOM.render(
-	<App />, 
+	<Provider store={theStore}>
+		<App />
+	</Provider>, 
 	document.getElementById('root'
 ));
 
