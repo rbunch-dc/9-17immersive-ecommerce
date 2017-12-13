@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // Custom Components
-import NavBar from './NavBar';
+import NavBar from './containers/NavBar';
 import SlickSlider from './components/SlickSlider';
 import Register from './containers/Register';
 import Home from './components/Home';

@@ -10,6 +10,7 @@ class Register extends Component{
 	constructor(){
 		super();
 		this.state = {
+			error: ""
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
@@ -23,6 +24,10 @@ class Register extends Component{
 			// Move them to the home page.
 			this.props.history.push('/');
 			// line above: tell teh router to move them forward to /
+		}else if(newProps.auth.msg === "userExists"){
+			this.setState({
+				error: "This email address is already registered. Please login or use a different email."
+			})
 		}
 	}
 
@@ -38,14 +43,25 @@ class Register extends Component{
 			state: event.target[5].value,
 			salesRep: event.target[6].value
 		}
-		console.log(formData);
-		this.props.authAction(formData);
+		if(formData.name === ""){
+			this.setState({
+				error: "Name field cannot be empty.",
+				// type: "error"
+			})
+		}else{
+			this.props.authAction(formData);
+		}
+		// console.log(formData);
 	}
 
 	render(){
 		console.log(this.props.auth);
+		if(this.state.type === "error"){
+			var msgClass = "text-dagner"
+		}
 		return(
 			<Form horizontal onSubmit={this.handleSubmit}>
+				<h2 className="bg-danger">{this.state.error}</h2>
 	        <FormGroup controlId="formHorizontalName" validationState={this.state.nameError}>
 	            <Col componentClass={ControlLabel} sm={2}>
 	                Name
