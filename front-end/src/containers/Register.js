@@ -14,6 +14,18 @@ class Register extends Component{
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
+	componentWillReceiveProps(newProps){
+		console.log(this.props);
+		console.log(newProps);
+		if(newProps.auth.msg === "registerSuccess"){
+			// the user was inserted. 
+			// We have the token and name safely in the auth reducer.
+			// Move them to the home page.
+			this.props.history.push('/');
+			// line above: tell teh router to move them forward to /
+		}
+	}
+
 
 	handleSubmit(event){
 		event.preventDefault();
