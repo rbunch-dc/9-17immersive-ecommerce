@@ -27,6 +27,38 @@ router.post('/register', (req,res,next)=>{
 	//   - insert user into customers FIRST (because we need CID for users)
 	//   - insert user into users
 	//   - res.json({msg:"userInserted", token: token, name: name})
+	// FIRST check to see if user exists. We will use email.
+	const checkEmail = new Promise((resolve, reject) =>{
+		const checkEmailQuery = `SELECT * FROM users WHERE email = ?;`;
+		connection.query(checkEmailQuery,[userData.email],(error, results)=>{
+			if (error) { 
+				throw error; //for development
+				// reject(error) //in production
+			}else if(results.length > 0){
+				// user exists already. goodbye.
+				reject({
+					msg: "userExists"
+				})
+			}else{
+				// no error. no user. resolve (we dont care about results)
+				resolve()
+			}
+		});
+	})
+	checkEmail.then(
+		// code to run if our checkEmail resolves.
+		()=>{
+			console.log("User is not in the db.")
+			res.json({
+				msg:"user does not exist"
+			})
+		}
+	).catch(
+	// code to run if checkEmail rejects
+		(error)=>{
+			res.json(error);
+		}
+	)
 })
 
 
