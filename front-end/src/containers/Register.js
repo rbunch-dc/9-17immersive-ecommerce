@@ -14,10 +14,20 @@ class Register extends Component{
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
+
 	handleSubmit(event){
 		event.preventDefault();
-		const name = document.getElementById('name').value;
-		this.props.authAction(name);
+		var formData = {
+			name: event.target[0].value,
+			email: event.target[1].value,
+			accountType: event.target[2].value,
+			password: event.target[3].value,
+			city: event.target[4].value,
+			state: event.target[5].value,
+			salesRep: event.target[6].value
+		}
+		console.log(formData);
+		this.props.authAction(formData);
 	}
 
 	render(){
@@ -29,7 +39,7 @@ class Register extends Component{
 	                Name
 	            </Col>
 	            <Col sm={10}>
-	                <FormControl id="name" type="text" name="fullName" placeholder="Full Name" />
+	                <FormControl type="text" name="fullName" placeholder="Full Name" />
 	            </Col>
 	        </FormGroup>
 	        <FormGroup controlId="formHorizontalName" validationState={this.state.emailError}>
@@ -110,5 +120,9 @@ function mapDispatchToProps(dispatch){
 }
 
 // export default Register;
+console.log(connect);
+// var connectWithReduxFunction = connect(mapStateToProps,mapDispatchToProps);
+// var componentThatKnowsAboutRedux = connectWithReduxFunction(Register)
 export default connect(mapStateToProps,mapDispatchToProps)(Register);
+// export default componentThatKnowsAboutRedux;
 
