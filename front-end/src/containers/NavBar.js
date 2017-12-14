@@ -36,6 +36,7 @@ class NavBar extends Component{
 		var shopMenu = this.props.productLines.map((pl, index)=>{
 			return(<Link key={index} to={`/shop/${pl.link}`}>{pl.productLine}</Link>)
 		})
+		console.log(shopMenu)
 		return(
 			<div id="navbar">
 				<nav className="navbar navbar-fixed-top">
