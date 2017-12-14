@@ -11,6 +11,10 @@ var bcrypt = require('bcrypt-nodejs');
 var randToken = require('rand-token');
 // console.log(randToken.uid(100));
 
+router.post('/login', (req, res, next)=>{
+	console.log(req.body);
+	res.json(req.body);
+});
 
 router.post('/register', (req,res,next)=>{
 	console.log(req.body);
