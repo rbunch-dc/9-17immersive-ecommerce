@@ -160,5 +160,16 @@ router.post('/register', (req,res,next)=>{
 	)
 })
 
+router.get('/productlines/get', (req, res, next)=>{
+	const selectQuery = `SELECT * FROM productlines`;
+	connection.query(selectQuery,(error, results)=>{
+		if(error){
+			throw error; //dev only
+		}else{
+			res.json(results)
+		}
+	})
+});
+
 
 module.exports = router;
