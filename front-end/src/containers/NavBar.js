@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import GetProductLines from '../actions/GetProductLines';
+import {bindActionCreators} from 'redux';
 
 class NavBar extends Component{
 	constructor(){
 		super();
+	}
+
+	componentDidMount(){
+		this.props.getProductLines();
 	}
 
 	componentWillReceiveProps(newProps){
@@ -26,6 +32,7 @@ class NavBar extends Component{
 			]
 		}
 		console.log(this.props.auth);
+		console.log(this.props.productLines);
 		return(
 			<div id="navbar">
 				<nav className="navbar navbar-fixed-top">
@@ -59,9 +66,16 @@ class NavBar extends Component{
 function mapStateToProps(state){
 	// state = RootReducer
 	return{
-		auth: state.auth
+		auth: state.auth,
+		productLines: state.pl
 	}
 }
 
-export default connect(mapStateToProps)(NavBar);
+function mapDispatchToProps(dispatch){
+	return bindActionCreators({
+		getProductLines: GetProductLines
+	},dispatch);
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(NavBar);
 // export default NavBar;
