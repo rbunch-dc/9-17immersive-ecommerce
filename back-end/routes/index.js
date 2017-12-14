@@ -13,6 +13,33 @@ var randToken = require('rand-token');
 
 router.post('/login', (req, res, next)=>{
 	console.log(req.body);
+	const email = req.body.email;
+	const password = req.body.password;
+
+	const checkLoginQuery = `SELECT * FROM users WHERE email = ?`;
+	connection.query(checkLoginQuery, [email], (error, results)=>{
+		if(error){
+			throw error; //dev only
+		}
+		if(results.length === 0){
+			this user does not exist. Goodbye.
+			res.json({
+				msg: 'badUser'
+			})
+		}else{
+			// this email is valid, see if the password is...
+			// password is the english they gave us on the form
+			// results[0].password is what we have for this user in the DB
+			const checkHash = bcrypt.compareSync(password, results[0].password)
+			if(checkHash){
+				// these are the droids we're looking for.
+			}else{
+				// you dont want to sell me deathsticks. You want to go home
+				// and rethink your life. 
+			}
+		}
+	})
+
 	res.json(req.body);
 });
 
