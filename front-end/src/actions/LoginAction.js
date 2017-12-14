@@ -7,7 +7,7 @@ export default function(formData){
 		data: formData
 	})
 
-	console.log("Login action running")
+	// console.log("Login action running")
 	return {
 		type: "AUTH_ACTION",
 		payload: axiosPromise

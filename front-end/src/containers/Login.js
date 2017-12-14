@@ -17,6 +17,21 @@ class Login extends Component{
     this.handleSubmit = this.handleSubmit.bind(this);
   }	
 
+  componentWillReceiveProps(newProps){
+	if(newProps.auth.msg === "wrongPassword"){
+		this.setState({
+			error: "This password does not match."
+		});
+	}else if(newProps.auth.msg === "badUser"){
+		this.setState({
+			error: "We do not have an account for this email address."
+		})
+	}else if(newProps.auth.msg === "loginSuccess"){
+		// usr has logged in. Move them on
+		newProps.history.push('/');
+	}
+  }
+
   handleSubmit(event){
   	event.preventDefault();
   	// console.dir(event.target);
@@ -26,18 +41,12 @@ class Login extends Component{
   		email: email,
   		password: password
   	}
-  	if(formData.email.length === 0){
-
-  	}else if(formData.password.length === 0 ){
-  		this.setState({
-  			error: "Password field cannot be empty"
-  		});
-  	}else{
-  		this.props.loginAction(formData);
-  	}
+  	this.props.loginAction(formData);
   }
 
 	render(){
+		console.log(this.props.auth);
+
 		return(
 			<div className="register-wrapper">
 				<h1 className="text-danger">{this.state.error}</h1>
