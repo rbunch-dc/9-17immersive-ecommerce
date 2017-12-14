@@ -171,5 +171,19 @@ router.get('/productlines/get', (req, res, next)=>{
 	})
 });
 
+router.get('/productlines/:productline/get',(req, res, next)=>{
+	const pl = req.params.productline
+	var plQuery = `SELECT * FROM productlines
+		INNER JOIN products ON productlines.productLine = products.productLine
+		WHERE productlines.productline = ?` 
+	connection.query(plQuery,[pl],(error,results)=>{
+		if (error){
+			throw error //dev only
+		}else{
+			res.json(results);
+		}
+	})
+});
+
 
 module.exports = router;

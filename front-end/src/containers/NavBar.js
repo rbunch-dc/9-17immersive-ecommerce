@@ -34,7 +34,8 @@ class NavBar extends Component{
 		console.log(this.props.auth);
 		console.log(this.props.productLines);
 		var shopMenu = this.props.productLines.map((pl, index)=>{
-			return(<Link key={index} to={`/shop/${pl.link}`}>{pl.productLine}</Link>)
+			const safeLink = encodeURIComponent(pl.productLine);
+			return(<Link key={index} to={`/shop/${safeLink}`}>{pl.productLine}</Link>)
 		})
 		console.log(shopMenu)
 		return(
