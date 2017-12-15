@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import ProductRow from '../components/ProductRow';
+import { bindActionCreators } from 'redux';
+import UpdateCart from '../actions/UpdateCart';
 
 class ProductLines extends Component{
 	constructor(){
@@ -9,11 +11,11 @@ class ProductLines extends Component{
 		this.state = {
 			productList: []
 		}
+		this.getProducts = this.getProducts.bind(this);
 	}
 
-
-	componentDidMount(){
-		const pl = this.props.match.params.productLine
+	getProducts(props){
+		const pl = props.match.params.productLine
 		const url = `${window.apiHost}/productlines/${pl}/get`;
 		axios.get(url)
 		.then((response)=>{
@@ -21,7 +23,15 @@ class ProductLines extends Component{
 			this.setState({
 				productList: response.data
 			})
-		});
+		});		
+	}
+
+	componentDidMount(){
+		this.getProducts(this.props);
+	}
+
+	componentWillReceiveProps(nextProps){
+		this.getProducts(nextProps);
 	}
 
 	render(){
@@ -33,6 +43,8 @@ class ProductLines extends Component{
 				<ProductRow 
 					key={index}
 					product={product}
+					addToCart={this.props.updateCart}
+					token={this.props.auth.token}
 				/>
 			)
 		})
@@ -63,7 +75,7 @@ class ProductLines extends Component{
 							</tr>
 						</thead>
 						<tbody>
-							{products}	
+							{products}
 						</tbody>
 					</table>
 				</div>
@@ -74,9 +86,17 @@ class ProductLines extends Component{
 
 function mapStateToProps(state){
 	return{
-		pl: state.pl
+		pl: state.pl,
+		auth: state.auth
 	}
 }
 
+// We need access to the updateCart action
+function mapDispatchToProps(dispatch){
+	return bindActionCreators({
+		updateCart: UpdateCart
+	}, dispatch)
+}
+
 // export default ProductLines;
-export default connect(mapStateToProps)(ProductLines)
+export default connect(mapStateToProps, mapDispatchToProps)(ProductLines)

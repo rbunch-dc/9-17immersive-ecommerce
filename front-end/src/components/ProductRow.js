@@ -5,7 +5,21 @@
 import React from 'react';
 
 function ProductRow(props){
+	console.log(props.token);
 	const product = props.product;
+	if(props.token === undefined){
+		// this user is not logged in.
+		var button = "";
+	}else{
+		var button = <button
+						className="btn btn-primary"
+						onClick={()=>{
+							props.addToCart(props.token,product.productCode)
+						}}
+					>Add to Cart</button>
+	}
+
+
 	if(product.quantityInStock > 100){
 		var inStockClass = "";
 		var inStock = "In Stock!"
@@ -26,6 +40,7 @@ function ProductRow(props){
 			<td className={inStockClass}>{inStock}</td>
 			<td>{product.buyPrice}</td>
 			<td>{product.MSRP}</td>			
+			<td>{button}</td>
 		</tr>
 	)
 };
