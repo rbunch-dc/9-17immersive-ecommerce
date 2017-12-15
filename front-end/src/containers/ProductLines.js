@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import ProductRow from '../components/ProductRow';
 
 class ProductLines extends Component{
 	constructor(){
@@ -28,7 +29,12 @@ class ProductLines extends Component{
 		// console.log(this.props.pl)
 		console.log(this.state.productList);
 		const products = this.state.productList.map((product,index)=>{
-			return (<div></div>)
+			return (
+				<ProductRow 
+					key={index}
+					product={product}
+				/>
+			)
 		})
 		var thisPL = this.props.pl.filter((obj)=>{
 			return obj.productLine === this.props.match.params.productLine
@@ -44,7 +50,22 @@ class ProductLines extends Component{
 				<h1>Welcome to the {this.props.match.params.productLine} page</h1>
 				<p>{desc}</p>
 				<div className="products">
-					{products}
+					<table className="table table-striped">
+						<thead>
+							<tr>
+								<th className="table-head">Product Name</th>
+								<th className="table-head">Model Scale</th>
+								<th className="table-head">Made by</th>
+								<th className="table-head">Description</th>
+								<th className="table-head">In Stock</th>
+								<th className="table-head">Your Price!</th>
+								<th className="table-head">MSRP</th>
+							</tr>
+						</thead>
+						<tbody>
+							{products}	
+						</tbody>
+					</table>
 				</div>
 			</div>
 		)
