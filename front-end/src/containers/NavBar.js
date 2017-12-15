@@ -12,7 +12,7 @@ class NavBar extends Component{
 	}
 
 	fakeLogin(){
-		this.props.auth('fake');
+		this.props.loginAction('fake');
 	}
 
 	componentDidMount(){
@@ -26,7 +26,7 @@ class NavBar extends Component{
 	render(){
 		// console.log(this.props.cart);
 		console.log(this.props.auth);
-		if((this.props.auth.name !== undefined) && (this.props.auth.name !== "")){
+		if(this.props.auth.name !== undefined){
 			// the user is logged in
 			if(this.props.cart.length > 0){
 				// there is something in this user's cart.
@@ -104,7 +104,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		getProductLines: GetProductLines,
-		auth: LoginAction
+		loginAction: LoginAction
 	},dispatch);
 }
 
