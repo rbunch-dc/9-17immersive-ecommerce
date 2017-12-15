@@ -11,6 +11,25 @@ var bcrypt = require('bcrypt-nodejs');
 var randToken = require('rand-token');
 // console.log(randToken.uid(100));
 
+// router.all('*', (req, res, next)=>{
+
+// });
+
+router.post('/fakelogin', (req, res, next)=>{
+	const getFirstUser = `SELECT * from users limit 1;`;
+	connection.query(getFirstUser, (error, results)=>{
+		if(error){
+			throw error;
+		}
+		res.json({
+			msg: "loginSuccess",
+			token: results[0].token,
+			name: results[0].name
+		});				
+	})
+
+});
+
 router.post('/login', (req, res, next)=>{
 	console.log(req.body);
 	const email = req.body.email;

@@ -3,10 +3,16 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import GetProductLines from '../actions/GetProductLines';
 import {bindActionCreators} from 'redux';
+import LoginAction from '../actions/LoginAction';
 
 class NavBar extends Component{
 	constructor(){
 		super();
+		this.fakeLogin = this.fakeLogin.bind(this)
+	}
+
+	fakeLogin(){
+		this.props.auth('fake');
 	}
 
 	componentDidMount(){
@@ -18,8 +24,9 @@ class NavBar extends Component{
 	}
 
 	render(){
-		console.log(this.props.cart);
-		if(this.props.auth.name !== undefined){
+		// console.log(this.props.cart);
+		console.log(this.props.auth);
+		if((this.props.auth.name !== undefined) && (this.props.auth.name !== "")){
 			// the user is logged in
 			if(this.props.cart.length > 0){
 				// there is something in this user's cart.
@@ -36,6 +43,7 @@ class NavBar extends Component{
 			]
 		}else{
 			var rightMenuBar = [
+				<li><button className="btn btn-primary" onClick={this.fakeLogin}>FAKE LOGIN</button></li>,
 			    <li key={1}><Link to="/login">Sign in</Link> or <Link to="/register">Create an account</Link></li>,
 			    <li key={2}>(0) items in cart | ($0.00)</li>
 			]
@@ -95,7 +103,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
-		getProductLines: GetProductLines
+		getProductLines: GetProductLines,
+		auth: LoginAction
 	},dispatch);
 }
 
