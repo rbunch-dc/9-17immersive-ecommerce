@@ -185,5 +185,49 @@ router.get('/productlines/:productline/get',(req, res, next)=>{
 	})
 });
 
+router.post('/updateCart', (req, res, next)=>{
+	const productCode = req.body.productCode;
+	const userToken = req.body.userToken;
+	// FIRST... is this even a valid token?
+	const getUidQuery = `SELECT id from users WHERE token = ?;`;
+	connection.query(getUidQuery,[userToken],(error, results)=>{
+		if(error){
+			throw error; //dev only
+		}else if(results.length === 0){
+			// THIS TOKEN IS BAD. USER IS CONFUSED OR A LIAR
+			res.json({
+				msg:"badToken"
+			});
+		}else{
+			// Get the user's id for the last query
+			const uid = results[0].id;
+			// this is a good token. I know who this is now. 
+			const addToCartQuery = `INSERT into cart (uid, productCode)
+				VALUES (?,?);`;
+			connection.query(addToCartQuery,[uid,productCode],(error)=>{
+				if(error){
+					throw error;
+				}else{
+					// the insert worked.
+					// get the sum of their products and their total
+					const getCartTotals = `SELECT SUM(buyPrice) as totalPrice, count(buyPrice) as totalItems 
+						FROM cart
+						INNER JOIN products ON products.productCode = cart.productCode
+						WHERE cart.uid = ?;`;
+					connection.query(getCartTotals,[uid],(error,cartResults)=>{
+						if(error){
+							throw error;
+						}else{
+							res.json(cartResults);
+						}
+					})
+				}
+			});
+		}
+	});
+
+	// res.json(req.body)
+});
+
 
 module.exports = router;

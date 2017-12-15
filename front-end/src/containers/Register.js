@@ -43,6 +43,7 @@ class Register extends Component{
 			state: event.target[5].value,
 			salesRep: event.target[6].value
 		}
+
 		if(formData.name === ""){
 			this.setState({
 				error: "Name field cannot be empty.",

@@ -18,6 +18,7 @@ class NavBar extends Component{
 	}
 
 	render(){
+		console.log(this.props.cart);
 		if(this.props.auth.name !== undefined){
 			// the user is logged in
 			var rightMenuBar = [
@@ -31,8 +32,8 @@ class NavBar extends Component{
 			    <li key={2}>(0) items in cart | ($0.00)</li>
 			]
 		}
-		console.log(this.props.auth);
-		console.log(this.props.productLines);
+		// console.log(this.props.auth);
+		// console.log(this.props.productLines);
 		var shopMenu = this.props.productLines.map((pl, index)=>{
 			const safeLink = encodeURIComponent(pl.productLine);
 			return(<Link key={index} to={`/shop/${safeLink}`}>{pl.productLine}</Link>)
@@ -79,7 +80,8 @@ function mapStateToProps(state){
 	// state = RootReducer
 	return{
 		auth: state.auth,
-		productLines: state.pl
+		productLines: state.pl,
+		cart: state.cart
 	}
 }
 
