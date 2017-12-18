@@ -19,6 +19,7 @@ class Cart extends Component{
             image: 'http://www.digitalcrafts.com/sites/all/themes/digitalcrafts/images/digitalcrafts-site-logo.png',
             token: (token) => {
             	console.log(token);
+            	console.log(this.props.auth.token);
                 var theData = {
                     amount: this.props.cart.totalPrice * 100,
                     stripeToken: token.id,
@@ -28,10 +29,12 @@ class Cart extends Component{
                     method: 'POST',
                     url: `${window.apiHost}/stripe`,
                     data: theData
-                }).then((data) => {
-                    console.log(data);
-                    if (data.msg === 'paymentSuccess') {
-
+                }).then((response) => {
+                    console.log(response);
+                    if (response.data.msg === 'paymentSuccess') {
+                    	this.props.history.push('/thankyou')
+                    }else{
+                    	console.log(response.data.msg)
                     }
                 });
             }
