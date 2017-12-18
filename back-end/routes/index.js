@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var config = require('../config/config');
+var stripe = require('stripe')(config.stripeKey);
 var connection = mysql.createConnection(config)
 connection.connect();
 
@@ -271,7 +272,7 @@ router.post('/updateCart', (req, res, next)=>{
 				}else{
 					// the insert worked.
 					// get the sum of their products and their total
-					const getCartTotals = `SELECT SUM(buyPrice) as totalPrice, count(buyPrice) as totalItems 
+					const getCartTotals = `SELECT ROUND(SUM(buyPrice),2) as totalPrice, count(buyPrice) as totalItems 
 						FROM cart
 						INNER JOIN products ON products.productCode = cart.productCode
 						WHERE cart.uid = ?;`;
@@ -279,7 +280,13 @@ router.post('/updateCart', (req, res, next)=>{
 						if(error){
 							throw error;
 						}else{
-							res.json(cartResults);
+							var finalCart = cartResults[0];
+							// we dont care about their products array on update
+							// we only care about it on the /cart page.
+							// so returning an empty products array is safe.
+							// it WILL be updated when they get to the /cart page.
+							finalCart.products = [];
+							res.json(finalCart);
 						}
 					})
 				}
@@ -289,6 +296,30 @@ router.post('/updateCart', (req, res, next)=>{
 
 	// res.json(req.body)
 });
+
+router.post('/stripe',(req, res, next)=>{
+	// Bring in vars from the ajax request
+	const userToken = req.body.userToken;
+	const stripeToken = req.body.stripeToken;
+	const amount = req.body.amount;
+	// stripe module required above, is assocaited with our secretkey.
+	// it has a charges object which has multiple methods.
+	// the one we want, is create.
+	// create takes 2 args:
+	// 1. object (stripe stuff)
+	// 2. function to run when done
+	stripe.charages.create({
+		amount: amount,
+		currency: 'usd',
+		source: stripeToken,
+		description: "Charges for classicmodels"
+	},
+	(error, charge)=>{
+		// stripe, when the charge has been run,
+		// runs this callback, and sends it any errors, and the charge object
+
+	});
+})
 
 
 module.exports = router;
