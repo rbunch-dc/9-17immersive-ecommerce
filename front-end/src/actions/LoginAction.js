@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 export default function(formData){
+	// THIS IS TO BE REMOVED IN PROD
+	// FOR DEV PURPOSES ONLY
 	if(formData === "fake"){
 		var axiosPromise = axios({
 			method: "POST",

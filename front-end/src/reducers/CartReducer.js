@@ -1,8 +1,16 @@
 export default function(state = [], action){
-	if(action.type === 'UPDATE_CART'){
-		// var newState = {...state};
-		return action.payload.data;
-	}else{
-		return state;
+	switch(action.type){
+		case 'UPDATE_CART':
+		case 'GET_CART':
+			return action.payload.data;
+			break
+		default:
+			return state;
 	}
+	// if((action.type === 'UPDATE_CART') || (action.type === 'GET_CART')){
+	// 	// var newState = {...state};
+	// 	return action.payload.data;
+	// }else{
+	// 	return state;
+	// }
 }

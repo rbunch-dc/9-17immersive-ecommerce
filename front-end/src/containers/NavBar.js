@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import GetProductLines from '../actions/GetProductLines';
 import {bindActionCreators} from 'redux';
 import LoginAction from '../actions/LoginAction';
+import GetCart from '../actions/GetCart';
 
 class NavBar extends Component{
 	constructor(){
@@ -19,8 +20,13 @@ class NavBar extends Component{
 		this.props.getProductLines();
 	}
 
+	// onLogin we need to update the Cart
 	componentWillReceiveProps(newProps){
-
+		console.log(newProps);
+		if(newProps.auth.msg === 'loginSuccess'){
+			// the user jsut logged in. Go get their cart.
+			this.props.getCart();
+		}
 	}
 
 	render(){
@@ -104,7 +110,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		getProductLines: GetProductLines,
-		loginAction: LoginAction
+		loginAction: LoginAction,
+		getCart: GetCart
 	},dispatch);
 }
 
