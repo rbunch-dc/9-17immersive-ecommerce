@@ -227,7 +227,19 @@ router.post('/getCart', (req,res,next)=>{
 				if(error){
 					throw error;
 				}else{
-					res.json(cartResults);
+					// res.json(cartResults);
+					const getCartProducts =`SELECT * FROM cart
+						INNER JOIN products on products.productCode = cart.productCode
+						WHERE uid = ?`;
+					connection.query(getCartProducts,[uid],(error, cartContents)=>{
+						if(error){
+							throw error; //dev onlhy
+						}else{
+							var finalCart = cartResults[0];
+							finalCart.products = cartContents;
+							res.json(finalCart)
+						}
+					})
 				}
 			})
 		}
