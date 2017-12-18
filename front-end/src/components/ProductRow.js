@@ -11,7 +11,7 @@ function ProductRow(props){
 		// this user is not logged in.
 		var button = "";
 	}else{
-		var button = <button
+		button = <button
 						className="btn btn-primary"
 						onClick={()=>{
 							props.addToCart(props.token,product.productCode)
@@ -24,11 +24,11 @@ function ProductRow(props){
 		var inStockClass = "";
 		var inStock = "In Stock!"
 	}else if(product.quantityInStock > 0){
-		var inStockClass = "bg-warning";
-		var inStock = 'Order Soon!'
+		inStockClass = "bg-warning";
+		inStock = 'Order Soon!'
 	}else{
-		var inStockClass = "bg-danger";
-		var inStock = 'Out of stock!'
+		inStockClass = "bg-danger";
+		inStock = 'Out of stock!'
 	}
 
 	return(

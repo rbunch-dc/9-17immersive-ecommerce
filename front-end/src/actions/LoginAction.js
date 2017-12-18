@@ -10,7 +10,7 @@ export default function(formData){
 			data: formData
 		})		
 	}else{
-		var axiosPromise = axios({
+		axiosPromise = axios({
 			method: "POST",
 			url: `${window.apiHost}/login`,
 			data: formData

@@ -26,7 +26,7 @@ class NavBar extends Component{
 
 	render(){
 		console.log(this.props.cart);
-		console.log(this.props.auth);
+		// console.log(this.props.auth);
 		if(this.props.auth.name !== undefined){
 			// the user is logged in
 			if(this.props.cart.totalPrice !== undefined){
@@ -35,7 +35,7 @@ class NavBar extends Component{
 				const totalItems = this.props.cart.totalItems;
 				var cartText = `(${totalItems}) items in your cart | ($${totalPrice})`
 			}else{
-				var cartText = "Your cart is empty"
+				cartText = "Your cart is empty"
 			}
 			var rightMenuBar = [
 				<li key={1} className="">Welcome, {this.props.auth.name}</li>,
@@ -43,8 +43,8 @@ class NavBar extends Component{
 				<li key={3}><Link to="/logout">Logout</Link></li>
 			]
 		}else{
-			var rightMenuBar = [
-				<li><button className="btn btn-primary" onClick={this.fakeLogin}>FAKE LOGIN</button></li>,
+			rightMenuBar = [
+				<li key={0}><button className="btn btn-primary" onClick={this.fakeLogin}>FAKE LOGIN</button></li>,
 			    <li key={1}><Link to="/login">Sign in</Link> or <Link to="/register">Create an account</Link></li>,
 			    <li key={2}>(0) items in cart | ($0.00)</li>
 			]
@@ -55,7 +55,7 @@ class NavBar extends Component{
 			const safeLink = encodeURIComponent(pl.productLine);
 			return(<Link key={index} to={`/shop/${safeLink}`}>{pl.productLine}</Link>)
 		})
-		console.log(shopMenu)
+		// console.log(shopMenu)
 		return(
 			<div id="navbar">
 				<nav className="navbar navbar-fixed-top">

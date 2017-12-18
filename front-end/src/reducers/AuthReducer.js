@@ -9,10 +9,8 @@ export default function(state = [], action){
 			// var newState = {...state};
 			// I'm going to update. I care about this action.
 			return action.payload.data;
-			break;
 		case 'LOGOUT':
 			return [];
-			break;
 		default:
 			return state;			
 	}
