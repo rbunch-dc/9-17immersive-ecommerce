@@ -22,11 +22,6 @@ class NavBar extends Component{
 
 	// onLogin we need to update the Cart
 	componentWillReceiveProps(newProps){
-		console.log(newProps);
-		if(newProps.auth.msg === 'loginSuccess'){
-			// the user jsut logged in. Go get their cart.
-			this.props.getCart();
-		}
 	}
 
 	render(){
