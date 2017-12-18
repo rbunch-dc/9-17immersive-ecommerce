@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 // we need bindActionCreators because we have redux actions that will dispatch
 import {bindActionCreators} from 'redux';
 import LoginAction from '../actions/LoginAction';
+import GetCart from '../actions/GetCart';
 
 class Login extends Component{
   constructor(){
@@ -27,6 +28,7 @@ class Login extends Component{
 			error: "We do not have an account for this email address."
 		})
 	}else if(newProps.auth.msg === "loginSuccess"){
+		this.props.getCart(newProps.auth.token);
 		// usr has logged in. Move them on
 		newProps.history.push('/');
 	}
@@ -88,7 +90,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
-		loginAction: LoginAction
+		loginAction: LoginAction,
+		getCart: GetCart
 	}, dispatch);
 }
 
