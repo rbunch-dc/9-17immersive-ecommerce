@@ -68,7 +68,7 @@ class Cart extends Component{
 			)
 		}else{
 			var cartArray = this.props.cart.products.map((product,index)=>{
-				console.log(product)
+				// console.log(product)
 				return (
 					<CartRow key={index} product={product} />
 				)
@@ -88,7 +88,7 @@ class Cart extends Component{
 							{cartArray}
 						</tbody>
 					</table>
-				</div>
+				</div> 	 
 			)
 		}
 	}

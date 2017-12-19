@@ -31,6 +31,8 @@ class ProductLines extends Component{
 	}
 
 	componentWillReceiveProps(nextProps){
+		console.log(nextProps.match.params.productLine);
+		console.log(this.props.match.params.productLine);
 		this.getProducts(nextProps);
 	}
 

@@ -239,6 +239,10 @@ router.post('/getCart', (req,res,next)=>{
 							var finalCart = cartResults[0];
 							finalCart.products = cartContents;
 							res.json(finalCart)
+							// when done finalCart looks like this:
+							// finalCart.totalItems
+							// finalCart.totalPrice
+							// finalCart.products: [p,p,p,p,p,p]
 						}
 					})
 				}
@@ -303,7 +307,7 @@ router.post('/stripe',(req, res, next)=>{
 	console.log(userToken);
 	const stripeToken = req.body.stripeToken;
 	const amount = req.body.amount;
-	// stripe module required above, is assocaited with our secretkey.
+	// stripe module required above, is associated with our secretkey.
 	// it has a charges object which has multiple methods.
 	// the one we want, is create.
 	// create takes 2 args:
@@ -325,27 +329,27 @@ router.post('/stripe',(req, res, next)=>{
 		}else{
 			// Insert stuff from cart that was just paid into:
 			// - orders
-			const getUserQuery = `SELECT users.id, users.cid,cart.productCode,products.buyPrice, COUNT(cart.productCode) as quantity FROM users 
+			const getUserQuery = `SELECT MAX(users.id) as id, MAX(users.cid) as cid, MAX(cart.productCode) as productCode, MAX(products.buyPrice) as buyPrice, COUNT(cart.productCode) as quantity FROM users 
 				INNER JOIN cart ON users.id = cart.uid
 				INNER JOIN products ON cart.productCode = products.productCode
-			WHERE token = ?
-			GROUP BY cart.productCode`
+				WHERE token = ?
+				GROUP BY cart.productCode`
 			console.log(userToken)
 			console.log(getUserQuery);
 			connection.query(getUserQuery, [userToken], (error2, results2)=>{
-				console.log("==========================")
-				console.log(results2)
-				console.log("==========================")
+				if(error2){
+					throw error2; //halt everything/dev only
+				}
 				const customerId = results2[0].cid;
-				console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-				console.log(customerId)
-				console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 				const insertIntoOrders = `INSERT INTO orders
 					(orderDate,requiredDate,comments,status,customerNumber)
 					VALUES
 					(?,?,'Website Order','Paid',?)`
 					connection.query(insertIntoOrders,[Date.now(),Date.now(),customerId],(error3,results3)=>{
-						console.log(results3)
+						// console.log(results3)
+						if(error3){
+							throw error3;
+						}
 						const newOrderNumber = results3.insertId;
 						// results2 (the select query above) contains an array of rows. 
 						// Each row has the uid, the productCOde, and the price
@@ -397,7 +401,6 @@ router.post('/stripe',(req, res, next)=>{
 								})
 							})
 						});
-
 					})
 			});
 
