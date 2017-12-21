@@ -25,7 +25,7 @@ class NavBar extends Component{
 	}
 
 	render(){
-		console.log(this.props.cart);
+		// console.log(this.props);
 		// console.log(this.props.auth);
 		if(this.props.auth.name !== undefined){
 			// the user is logged in
@@ -38,7 +38,7 @@ class NavBar extends Component{
 				cartText = "Your cart is empty"
 			}
 			var rightMenuBar = [
-				<li key={1} className="">Welcome, {this.props.auth.name}</li>,
+				<li key={1} className="">Welcome, <Link to='/account'>{this.props.auth.name}</Link></li>,
 				<li key={2}><Link to="/cart">{cartText}</Link></li>,
 				<li key={3}><Link to="/logout">Logout</Link></li>
 			]

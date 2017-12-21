@@ -180,31 +180,6 @@ router.post('/register', (req,res,next)=>{
 	)
 })
 
-router.get('/productlines/get', (req, res, next)=>{
-	const selectQuery = `SELECT * FROM productlines`;
-	connection.query(selectQuery,(error, results)=>{
-		if(error){
-			throw error; //dev only
-		}else{
-			res.json(results)
-		}
-	})
-});
-
-router.get('/productlines/:productline/get',(req, res, next)=>{
-	const pl = req.params.productline
-	var plQuery = `SELECT * FROM productlines
-		INNER JOIN products ON productlines.productLine = products.productLine
-		WHERE productlines.productline = ?` 
-	connection.query(plQuery,[pl],(error,results)=>{
-		if (error){
-			throw error //dev only
-		}else{
-			res.json(results);
-		}
-	})
-});
-
 router.post('/getCart', (req,res,next)=>{
 	const userToken = req.body.token;
 	const getUidQuery = `SELECT id from users WHERE token = ?;`;
@@ -344,8 +319,8 @@ router.post('/stripe',(req, res, next)=>{
 				const insertIntoOrders = `INSERT INTO orders
 					(orderDate,requiredDate,comments,status,customerNumber)
 					VALUES
-					(?,?,'Website Order','Paid',?)`
-					connection.query(insertIntoOrders,[Date.now(),Date.now(),customerId],(error3,results3)=>{
+					(NOW(), NOW(),'Website Order','Paid',?)`
+					connection.query(insertIntoOrders,[customerId],(error3,results3)=>{
 						// console.log(results3)
 						if(error3){
 							throw error3;
@@ -405,6 +380,37 @@ router.post('/stripe',(req, res, next)=>{
 			});
 
 		}
+	});
+})
+
+router.post('/orders/get', (req, res, next)=>{
+	// res.json(req.body.userToken); //sanity check
+	const getUserQuery = `SELECT * FROM users where token = ?;`;
+	connection.query(getUserQuery, [req.body.userToken],(error, results)=>{
+		if(error){
+			throw error;
+		}
+		if(results.length === 0){
+			// user not found!
+			res.json({
+				msg: "badToken"
+			})
+		}else{
+			// res.json(results[0]);	
+			// this user has valid token. set up a uid to use in future queries
+			const usersId = results[0].id;
+			const customersId = results[0].cid;
+			const getOrderDetails = `SELECT * FROM orders 
+				INNER JOIN orderdetails ON orders.orderNumber = orderDetails.orderNumber
+				WHERE customerNumber = ?`
+			connection.query(getOrderDetails,[customersId], (error, orderResults)=>{
+				if(error){
+					throw error;
+				}
+				res.json(orderResults);
+			});
+		}
+		
 	});
 })
 
